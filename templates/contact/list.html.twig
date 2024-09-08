@@ -1,0 +1,49 @@
+{# templates/contact/list.html.twig #}
+
+<h1>Votre carnet d'adresses</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+        <tr>
+            <td>{{ contact.nom }}</td>
+            <td>{{ contact.prenom }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.telephone }}</td>
+            <td>
+                <a href="{{ path('contact_edit', {id: contact.id}) }}">Modifier</a>
+                <form action="{{ path('contact_delete', {id: contact.id}) }}" method="post" style="display:inline-block;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce contact ?')">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">Aucun contact trouvé.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ path('contact_add') }}">Ajouter un nouveau contact</a>
+
+<hr>
+
+<h2>Importer des contacts</h2>
+<form action="{{ path('import_csv') }}" method="post" enctype="multipart/form-data">
+    <input type="file" name="csv_file" required>
+    <button type="submit">Importer</button>
+</form>
+
+<h2>Exporter vos contacts</h2>
+<a href="{{ path('export_csv') }}" class="btn btn-primary">Exporter en CSV</a>
